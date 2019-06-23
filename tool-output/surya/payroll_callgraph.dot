@@ -1,0 +1,444 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true, bgcolor = "#2e3e56" ];
+  node [ style = "filled", fillcolor = "#edad56", color = "#edad56", penwidth =3 ];
+  edge [ color = "#fcfcfc", penwidth =2, fontname = "helvetica Neue Ultra Light" ];
+subgraph "clusterPayroll" {
+  graph [ label = "Payroll", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Payroll.employeeAddressExists" [ label = "employeeAddressExists", color = "#1bc6a6", shape =doubleoctagon ];
+  "Payroll.employeeIdExists" [ label = "employeeIdExists", color = "#1bc6a6", shape =doubleoctagon ];
+  "Payroll.employeeActive" [ label = "employeeActive", color = "#1bc6a6", shape =doubleoctagon ];
+  "Payroll.employeeMatches" [ label = "employeeMatches", color = "#1bc6a6", shape =doubleoctagon ];
+  "Payroll.initialize" [ label = "initialize", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.addAllowedToken" [ label = "addAllowedToken", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.setPriceFeed" [ label = "setPriceFeed", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.setRateExpiryTime" [ label = "setRateExpiryTime", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.addEmployee" [ label = "addEmployee", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.addBonus" [ label = "addBonus", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.addReimbursement" [ label = "addReimbursement", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.setEmployeeSalary" [ label = "setEmployeeSalary", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.terminateEmployee" [ label = "terminateEmployee", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.changeAddressByEmployee" [ label = "changeAddressByEmployee", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.determineAllocation" [ label = "determineAllocation", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.payday" [ label = "payday", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.isForwarder" [ label = "isForwarder", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Payroll.forward" [ label = "forward", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Payroll.canForward" [ label = "canForward" ];
+  "Payroll.getEmployeeByAddress" [ label = "getEmployeeByAddress", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Payroll.getEmployee" [ label = "getEmployee", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Payroll.getAllocation" [ label = "getAllocation", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Payroll.isTokenAllowed" [ label = "isTokenAllowed", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Payroll._setPriceFeed" [ label = "_setPriceFeed" ];
+  "Payroll._setRateExpiryTime" [ label = "_setRateExpiryTime" ];
+  "Payroll._addEmployee" [ label = "_addEmployee" ];
+  "Payroll._addBonus" [ label = "_addBonus" ];
+  "Payroll._addReimbursement" [ label = "_addReimbursement" ];
+  "Payroll._addAccruedSalary" [ label = "_addAccruedSalary" ];
+  "Payroll._setEmployeeAddress" [ label = "_setEmployeeAddress" ];
+  "Payroll._terminateEmployee" [ label = "_terminateEmployee" ];
+  "Payroll._transferTokensAmount" [ label = "_transferTokensAmount" ];
+  "Payroll._removeEmployeeIfTerminatedAndPaidOut" [ label = "_removeEmployeeIfTerminatedAndPaidOut" ];
+  "Payroll._updateEmployeeAccountingBasedOnPaidSalary" [ label = "_updateEmployeeAccountingBasedOnPaidSalary" ];
+  "Payroll._employeeExists" [ label = "_employeeExists" ];
+  "Payroll._isEmployeeActive" [ label = "_isEmployeeActive" ];
+  "Payroll._getExchangeRateInDenominationToken" [ label = "_getExchangeRateInDenominationToken" ];
+  "Payroll._getLastPayrollDate" [ label = "_getLastPayrollDate" ];
+  "Payroll._getOwedSalarySinceLastPayroll" [ label = "_getOwedSalarySinceLastPayroll" ];
+  "Payroll._getOwedPayrollPeriod" [ label = "_getOwedPayrollPeriod" ];
+  "Payroll._paymentReferenceFor" [ label = "_paymentReferenceFor" ];
+  "Payroll._ensurePaymentAmount" [ label = "_ensurePaymentAmount" ];
+  "Payroll.initialized" [ label = "initialized" ];
+  "Payroll.isContract" [ label = "isContract" ];
+  "Payroll.arr" [ label = "arr" ];
+  "Payroll.getTimestamp64" [ label = "getTimestamp64" ];
+  "Payroll.runScript" [ label = "runScript" ];
+  "Payroll.ALLOWED_TOKENS_MANAGER_ROLE" [ label = "ALLOWED_TOKENS_MANAGER_ROLE" ];
+  "Payroll.ADD_EMPLOYEE_ROLE" [ label = "ADD_EMPLOYEE_ROLE" ];
+  "Payroll.TERMINATE_EMPLOYEE_ROLE" [ label = "TERMINATE_EMPLOYEE_ROLE" ];
+}
+
+subgraph "clusterPPFMock" {
+  graph [ label = "PPFMock", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "IFeed.get" [ label = "get", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+}
+
+subgraph "clusterKitBase" {
+  graph [ label = "KitBase", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "KitBase.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "KitBase.latestVersionAppBase" [ label = "latestVersionAppBase" ];
+  "KitBase.cleanupDAOPermissions" [ label = "cleanupDAOPermissions", color = "#f2c383", fillcolor = "#f2c383" ];
+  "KitBase.cleanupPermission" [ label = "cleanupPermission" ];
+  "KitBase.apmNamehash" [ label = "apmNamehash" ];
+  "KitBase.fac" [ label = "fac" ];
+}
+
+subgraph "clusterPayrollKit" {
+  graph [ label = "PayrollKit", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "PayrollKit.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "PayrollKit.newInstance" [ label = "newInstance", color = "#FF9797", fillcolor = "#FF9797" ];
+  "PayrollKit.installBaseApps" [ label = "installBaseApps" ];
+  "PayrollKit.installPayroll" [ label = "installPayroll" ];
+  "PayrollKit.installManagedToken" [ label = "installManagedToken" ];
+  "PayrollKit.newToken" [ label = "newToken" ];
+  "PayrollKit.addEmployees" [ label = "addEmployees" ];
+}
+
+subgraph "clustersum" {
+  graph [ label = "sum", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "sum.add" [ label = "add" ];
+}
+
+subgraph "clusterowedReimbursements" {
+  graph [ label = "owedReimbursements", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "owedReimbursements.sub" [ label = "sub" ];
+}
+
+subgraph "clusterowedBonusAmount" {
+  graph [ label = "owedBonusAmount", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "owedBonusAmount.sub" [ label = "sub" ];
+}
+
+subgraph "cluster_totalAmount" {
+  graph [ label = "_totalAmount", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "_totalAmount.mul" [ label = "mul" ];
+}
+
+subgraph "clusterFinance" {
+  graph [ label = "Finance", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "Finance.newImmediatePayment" [ label = "newImmediatePayment" ];
+  "Finance.initialize" [ label = "initialize" ];
+  "Finance.CREATE_PAYMENTS_ROLE" [ label = "CREATE_PAYMENTS_ROLE" ];
+  "Finance.deposit" [ label = "deposit" ];
+}
+
+subgraph "clusterIFeed" {
+  graph [ label = "IFeed", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "IFeed.get" [ label = "get" ];
+}
+
+subgraph "cluster_paidAmount" {
+  graph [ label = "_paidAmount", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "_paidAmount.div" [ label = "div" ];
+}
+
+subgraph "clustertimeDiff" {
+  graph [ label = "timeDiff", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "timeDiff.mul" [ label = "mul" ];
+  "timeDiff.add" [ label = "add" ];
+}
+
+subgraph "clustersalary" {
+  graph [ label = "salary", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "salary.mul" [ label = "mul" ];
+}
+
+subgraph "clusterPublicResolver" {
+  graph [ label = "PublicResolver", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "PublicResolver.addr" [ label = "addr" ];
+}
+
+subgraph "clusterENS" {
+  graph [ label = "ENS", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "ENS.resolver" [ label = "resolver" ];
+}
+
+subgraph "clusterRepo" {
+  graph [ label = "Repo", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "Repo.getLatest" [ label = "getLatest" ];
+}
+
+subgraph "clusterKernel" {
+  graph [ label = "Kernel", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "Kernel.APP_MANAGER_ROLE" [ label = "APP_MANAGER_ROLE" ];
+  "Kernel.acl" [ label = "acl" ];
+  "Kernel.newAppInstance" [ label = "newAppInstance" ];
+}
+
+subgraph "clusterACL" {
+  graph [ label = "ACL", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "ACL.CREATE_PERMISSIONS_ROLE" [ label = "CREATE_PERMISSIONS_ROLE" ];
+  "ACL.grantPermission" [ label = "grantPermission" ];
+  "ACL.revokePermission" [ label = "revokePermission" ];
+  "ACL.setPermissionManager" [ label = "setPermissionManager" ];
+  "ACL.createPermission" [ label = "createPermission" ];
+}
+
+subgraph "clusterDAOFactory" {
+  graph [ label = "DAOFactory", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "DAOFactory.newDAO" [ label = "newDAO" ];
+}
+
+subgraph "clusterVault" {
+  graph [ label = "Vault", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "Vault.initialize" [ label = "initialize" ];
+  "Vault.TRANSFER_ROLE" [ label = "TRANSFER_ROLE" ];
+}
+
+subgraph "clusterMiniMeToken" {
+  graph [ label = "MiniMeToken", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "MiniMeToken.changeController" [ label = "changeController" ];
+  "MiniMeToken.approve" [ label = "approve" ];
+}
+
+subgraph "clusterTokenManager" {
+  graph [ label = "TokenManager", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "TokenManager.initialize" [ label = "initialize" ];
+  "TokenManager.MINT_ROLE" [ label = "MINT_ROLE" ];
+  "TokenManager.mint" [ label = "mint" ];
+}
+
+subgraph "clusterMiniMeTokenFactory" {
+  graph [ label = "MiniMeTokenFactory", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "MiniMeTokenFactory.createCloneToken" [ label = "createCloneToken" ];
+}
+
+  "Payroll.employeeAddressExists";
+  "Payroll._employeeExists";
+  "Payroll.employeeIdExists";
+  "Payroll.employeeActive";
+  "Payroll._isEmployeeActive";
+  "Payroll.initialize";
+  "Payroll.initialized";
+  "Payroll.isContract";
+  "Payroll._setPriceFeed";
+  "Payroll._setRateExpiryTime";
+  "Payroll.addAllowedToken";
+  "Payroll.arr";
+  "Payroll.setPriceFeed";
+  "Payroll.setRateExpiryTime";
+  "Payroll.addEmployee";
+  "Payroll._addEmployee";
+  "Payroll.addBonus";
+  "Payroll._addBonus";
+  "Payroll.addReimbursement";
+  "Payroll._addReimbursement";
+  "Payroll.setEmployeeSalary";
+  "Payroll._getOwedSalarySinceLastPayroll";
+  "Payroll._addAccruedSalary";
+  "Payroll.getTimestamp64";
+  "Payroll.terminateEmployee";
+  "Payroll._terminateEmployee";
+  "Payroll.changeAddressByEmployee";
+  "Payroll._setEmployeeAddress";
+  "Payroll.determineAllocation";
+  "sum.add";
+  "Payroll.payday";
+  "Payroll._ensurePaymentAmount";
+  "Payroll._updateEmployeeAccountingBasedOnPaidSalary";
+  "owedReimbursements.sub";
+  "owedBonusAmount.sub";
+  "Payroll._transferTokensAmount";
+  "Payroll._removeEmployeeIfTerminatedAndPaidOut";
+  "Payroll.forward";
+  "Payroll.canForward";
+  "Payroll.runScript";
+  "Payroll._paymentReferenceFor";
+  "Payroll._getExchangeRateInDenominationToken";
+  "_totalAmount.mul";
+  "Finance.newImmediatePayment";
+  "Payroll._getLastPayrollDate";
+  "IFeed.get";
+  "_paidAmount.div";
+  "timeDiff.mul";
+  "timeDiff.add";
+  "Payroll._getOwedPayrollPeriod";
+  "salary.mul";
+  "KitBase.null";
+  "KitBase.apmNamehash";
+  "KitBase.fac";
+  "KitBase.latestVersionAppBase";
+  "PublicResolver.addr";
+  "ENS.resolver";
+  "Repo.getLatest";
+  "KitBase.cleanupDAOPermissions";
+  "KitBase.cleanupPermission";
+  "Kernel.APP_MANAGER_ROLE";
+  "ACL.CREATE_PERMISSIONS_ROLE";
+  "ACL.grantPermission";
+  "ACL.revokePermission";
+  "ACL.setPermissionManager";
+  "PayrollKit.newInstance";
+  "DAOFactory.newDAO";
+  "Kernel.acl";
+  "PayrollKit.newToken";
+  "ACL.createPermission";
+  "PayrollKit.installBaseApps";
+  "PayrollKit.installPayroll";
+  "PayrollKit.installManagedToken";
+  "PayrollKit.addEmployees";
+  "Payroll.ALLOWED_TOKENS_MANAGER_ROLE";
+  "Payroll.ADD_EMPLOYEE_ROLE";
+  "Kernel.newAppInstance";
+  "Vault.initialize";
+  "Finance.initialize";
+  "Vault.TRANSFER_ROLE";
+  "Finance.CREATE_PAYMENTS_ROLE";
+  "Payroll.TERMINATE_EMPLOYEE_ROLE";
+  "MiniMeToken.changeController";
+  "TokenManager.initialize";
+  "TokenManager.MINT_ROLE";
+  "TokenManager.mint";
+  "MiniMeToken.approve";
+  "Finance.deposit";
+  "MiniMeTokenFactory.createCloneToken";
+  "Payroll.employeeAddressExists" -> "Payroll._employeeExists" [ color = "#1bc6a6" ];
+  "Payroll.employeeIdExists" -> "Payroll._employeeExists" [ color = "#1bc6a6" ];
+  "Payroll.employeeActive" -> "Payroll._isEmployeeActive" [ color = "#1bc6a6" ];
+  "Payroll.initialize" -> "Payroll.initialized" [ color = "#1bc6a6" ];
+  "Payroll.initialize" -> "Payroll.isContract" [ color = "#1bc6a6" ];
+  "Payroll.initialize" -> "Payroll._setPriceFeed" [ color = "#1bc6a6" ];
+  "Payroll.initialize" -> "Payroll._setRateExpiryTime" [ color = "#1bc6a6" ];
+  "Payroll.addAllowedToken" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.setPriceFeed" -> "Payroll._setPriceFeed" [ color = "#1bc6a6" ];
+  "Payroll.setPriceFeed" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.setRateExpiryTime" -> "Payroll._setRateExpiryTime" [ color = "#1bc6a6" ];
+  "Payroll.setRateExpiryTime" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.addEmployee" -> "Payroll._addEmployee" [ color = "#1bc6a6" ];
+  "Payroll.addEmployee" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.addBonus" -> "Payroll._addBonus" [ color = "#1bc6a6" ];
+  "Payroll.addBonus" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.addReimbursement" -> "Payroll._addReimbursement" [ color = "#1bc6a6" ];
+  "Payroll.addReimbursement" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.setEmployeeSalary" -> "Payroll._getOwedSalarySinceLastPayroll" [ color = "#1bc6a6" ];
+  "Payroll.setEmployeeSalary" -> "Payroll._addAccruedSalary" [ color = "#1bc6a6" ];
+  "Payroll.setEmployeeSalary" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "Payroll.setEmployeeSalary" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.terminateEmployee" -> "Payroll._terminateEmployee" [ color = "#1bc6a6" ];
+  "Payroll.terminateEmployee" -> "Payroll.arr" [ color = "#1bc6a6" ];
+  "Payroll.changeAddressByEmployee" -> "Payroll._setEmployeeAddress" [ color = "#1bc6a6" ];
+  "Payroll.determineAllocation" -> "sum.add" [ color = "white" ];
+  "Payroll.payday" -> "Payroll._getOwedSalarySinceLastPayroll" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "Payroll._ensurePaymentAmount" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "Payroll._updateEmployeeAccountingBasedOnPaidSalary" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "Payroll._ensurePaymentAmount" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "owedReimbursements.sub" [ color = "white" ];
+  "Payroll.payday" -> "Payroll._ensurePaymentAmount" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "owedBonusAmount.sub" [ color = "white" ];
+  "Payroll.payday" -> "Payroll._transferTokensAmount" [ color = "#1bc6a6" ];
+  "Payroll.payday" -> "Payroll._removeEmployeeIfTerminatedAndPaidOut" [ color = "#1bc6a6" ];
+  "Payroll.forward" -> "Payroll.canForward" [ color = "#1bc6a6" ];
+  "Payroll.forward" -> "Payroll.runScript" [ color = "#1bc6a6" ];
+  "Payroll.canForward" -> "Payroll._isEmployeeActive" [ color = "#1bc6a6" ];
+  "Payroll._setPriceFeed" -> "Payroll.isContract" [ color = "#1bc6a6" ];
+  "Payroll._addEmployee" -> "Payroll._setEmployeeAddress" [ color = "#1bc6a6" ];
+  "Payroll._setEmployeeAddress" -> "Payroll._employeeExists" [ color = "#1bc6a6" ];
+  "Payroll._terminateEmployee" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "Payroll._transferTokensAmount" -> "Payroll._paymentReferenceFor" [ color = "#1bc6a6" ];
+  "Payroll._transferTokensAmount" -> "Payroll._getExchangeRateInDenominationToken" [ color = "#1bc6a6" ];
+  "Payroll._transferTokensAmount" -> "_totalAmount.mul" [ color = "white" ];
+  "Payroll._transferTokensAmount" -> "Finance.newImmediatePayment" [ color = "white" ];
+  "Payroll._updateEmployeeAccountingBasedOnPaidSalary" -> "Payroll._getLastPayrollDate" [ color = "#1bc6a6" ];
+  "Payroll._isEmployeeActive" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "Payroll._getExchangeRateInDenominationToken" -> "IFeed.get" [ color = "white" ];
+  "Payroll._getExchangeRateInDenominationToken" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "Payroll._getLastPayrollDate" -> "_paidAmount.div" [ color = "white" ];
+  "Payroll._getLastPayrollDate" -> "timeDiff.mul" [ color = "white" ];
+  "Payroll._getLastPayrollDate" -> "timeDiff.add" [ color = "white" ];
+  "Payroll._getLastPayrollDate" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "Payroll._getOwedSalarySinceLastPayroll" -> "Payroll._getOwedPayrollPeriod" [ color = "#1bc6a6" ];
+  "Payroll._getOwedSalarySinceLastPayroll" -> "salary.mul" [ color = "white" ];
+  "Payroll._getOwedPayrollPeriod" -> "Payroll._isEmployeeActive" [ color = "#1bc6a6" ];
+  "Payroll._getOwedPayrollPeriod" -> "Payroll.getTimestamp64" [ color = "#1bc6a6" ];
+  "KitBase.null" -> "KitBase.apmNamehash" [ color = "#1bc6a6" ];
+  "KitBase.null" -> "KitBase.fac" [ color = "white" ];
+  "KitBase.null" -> "KitBase.latestVersionAppBase" [ color = "#1bc6a6" ];
+  "KitBase.latestVersionAppBase" -> "PublicResolver.addr" [ color = "white" ];
+  "KitBase.latestVersionAppBase" -> "ENS.resolver" [ color = "white" ];
+  "KitBase.latestVersionAppBase" -> "Repo.getLatest" [ color = "white" ];
+  "KitBase.cleanupDAOPermissions" -> "KitBase.cleanupPermission" [ color = "#1bc6a6" ];
+  "KitBase.cleanupDAOPermissions" -> "Kernel.APP_MANAGER_ROLE" [ color = "white" ];
+  "KitBase.cleanupDAOPermissions" -> "KitBase.cleanupPermission" [ color = "#1bc6a6" ];
+  "KitBase.cleanupDAOPermissions" -> "ACL.CREATE_PERMISSIONS_ROLE" [ color = "white" ];
+  "KitBase.cleanupPermission" -> "ACL.grantPermission" [ color = "white" ];
+  "KitBase.cleanupPermission" -> "ACL.revokePermission" [ color = "white" ];
+  "KitBase.cleanupPermission" -> "ACL.setPermissionManager" [ color = "white" ];
+  "PayrollKit.newInstance" -> "DAOFactory.newDAO" [ color = "white" ];
+  "PayrollKit.newInstance" -> "Kernel.acl" [ color = "white" ];
+  "PayrollKit.newInstance" -> "PayrollKit.newToken" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.newInstance" -> "Kernel.APP_MANAGER_ROLE" [ color = "white" ];
+  "PayrollKit.newInstance" -> "PayrollKit.installBaseApps" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "PayrollKit.installPayroll" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "PayrollKit.installManagedToken" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "Payroll.addAllowedToken" [ color = "white" ];
+  "PayrollKit.newInstance" -> "PayrollKit.installManagedToken" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "Payroll.addAllowedToken" [ color = "white" ];
+  "PayrollKit.newInstance" -> "PayrollKit.installManagedToken" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "Payroll.addAllowedToken" [ color = "white" ];
+  "PayrollKit.newInstance" -> "PayrollKit.addEmployees" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "KitBase.cleanupDAOPermissions" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "KitBase.cleanupPermission" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "Payroll.ALLOWED_TOKENS_MANAGER_ROLE" [ color = "white" ];
+  "PayrollKit.newInstance" -> "KitBase.cleanupPermission" [ color = "#1bc6a6" ];
+  "PayrollKit.newInstance" -> "Payroll.ADD_EMPLOYEE_ROLE" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "KitBase.apmNamehash" [ color = "#1bc6a6" ];
+  "PayrollKit.installBaseApps" -> "KitBase.apmNamehash" [ color = "#1bc6a6" ];
+  "PayrollKit.installBaseApps" -> "Kernel.newAppInstance" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "KitBase.latestVersionAppBase" [ color = "#1bc6a6" ];
+  "PayrollKit.installBaseApps" -> "Kernel.newAppInstance" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "KitBase.latestVersionAppBase" [ color = "#1bc6a6" ];
+  "PayrollKit.installBaseApps" -> "Vault.initialize" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "Finance.initialize" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installBaseApps" -> "Vault.TRANSFER_ROLE" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "KitBase.apmNamehash" [ color = "#1bc6a6" ];
+  "PayrollKit.installPayroll" -> "Kernel.newAppInstance" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "KitBase.latestVersionAppBase" [ color = "#1bc6a6" ];
+  "PayrollKit.installPayroll" -> "Payroll.initialize" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "Finance.CREATE_PAYMENTS_ROLE" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "Payroll.TERMINATE_EMPLOYEE_ROLE" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "Payroll.ALLOWED_TOKENS_MANAGER_ROLE" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installPayroll" -> "Payroll.ADD_EMPLOYEE_ROLE" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "KitBase.apmNamehash" [ color = "#1bc6a6" ];
+  "PayrollKit.installManagedToken" -> "PayrollKit.newToken" [ color = "#1bc6a6" ];
+  "PayrollKit.installManagedToken" -> "Kernel.newAppInstance" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "KitBase.latestVersionAppBase" [ color = "#1bc6a6" ];
+  "PayrollKit.installManagedToken" -> "MiniMeToken.changeController" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "TokenManager.initialize" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "ACL.createPermission" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "TokenManager.MINT_ROLE" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "TokenManager.mint" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "MiniMeToken.approve" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "Finance.deposit" [ color = "white" ];
+  "PayrollKit.installManagedToken" -> "KitBase.cleanupPermission" [ color = "#1bc6a6" ];
+  "PayrollKit.installManagedToken" -> "TokenManager.MINT_ROLE" [ color = "white" ];
+  "PayrollKit.newToken" -> "MiniMeTokenFactory.createCloneToken" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.addEmployee" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.determineAllocation" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.changeAddressByEmployee" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.addEmployee" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.addEmployee" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.addEmployee" [ color = "white" ];
+  "PayrollKit.addEmployees" -> "Payroll.addEmployee" [ color = "white" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="#445773">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="#e8726d">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="#1bc6a6"]
+key:i2:e -> key2:i2:w [color="white"]
+}
+}
+
