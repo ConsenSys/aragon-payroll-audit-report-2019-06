@@ -41,6 +41,7 @@ ConsenSys Diligence conducted a security audit on a new Aragon app [Payroll](htt
 * **Lead Auditor:** Shayan Eskandari
 * **Co-auditors:** Daniel Luca, Martin Ortner, Sergii Kravchenko
 * **Date:** June 2019
+* 
 
 
 ## 2 Audit Scope
@@ -89,7 +90,7 @@ The audit team evaluated that the system is secure, resilient, and working accor
    * Quality of test coverage
 
 ## 3 System Overview
-The purpose of the Payroll app is to implement a Payroll system in multiple currencies/tokens. `Payroll.sol` uses [Passive Pricefeed (PPF)](https://github.com/aragon/ppf) as the feed for the price conversion between the tokens. It also uses Aragon OS for Access Control (ACL) and other Aragon app functionalities. The main Aragon app that is directly connected with Payroll is [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance) which acts as the vault that stores and handles `ETH` and token transfers.
+The purpose of the Payroll app is to implement a Payroll system in multiple currencies/tokens. `Payroll.sol` requires a price feed and [Passive Pricefeed (PPF)](https://github.com/aragon/ppf) is one such pricefeed available to Payroll instances for conversion between the tokens. Aragon team  encourages initial users to set up their instance with a simplified price feed that only sets a 1:1 rate between USD and DAI (and of course, DAI to DAI). It also uses aragonOS for Access Control (ACL) and other Aragon app functionalities. [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance) is a "frontend" contract to the underlying [Vault](https://github.com/aragon/aragon-apps/tree/master/apps/vault), which manages budgets and other nice accounting decorators. The Vault stores and handles `ETH` and token transfers and no funds are stored in the other contracts.
 
 
 ### 3.1 Detailed Design
@@ -109,7 +110,7 @@ A complete view of the inheritance structure:
 
 #### Components
 
-The application consists of the `Payroll` contract extending the Aragon Frameworks `AragonApp` base contract while also implementing the `IForwarder` interface. `Payroll` extends the Aragon Application offering with an automated employee payroll system, managing multiple tokens interfacing with the DAO's own `Finance` application that keeps track of income, expenses, and performs payments by interfacing with the DAO's `Vault`. Employees can decide in what (allowed) tokens they would like to be paid out on payday. Exchanges rates for the allowed tokens are fetched from a price feed provider implementing the `IFeed` interface.
+The application consists of the `Payroll` contract extending the aragonOS framework `AragonApp` base contract while also implementing the `IForwarder` interface. `Payroll` extends the Aragon Application offering with an automated employee payroll system, managing multiple tokens interfacing with the DAO's own `Finance` application that keeps track of income, expenses, and performs payments by interfacing with the DAO's `Vault`. Employees can decide in what (allowed) tokens they would like to be paid out on payday. Exchanges rates for the allowed tokens are fetched from a price feed provider implementing the `IFeed` interface.
 
 The following graphic attempts to give an overview of the components, actors and the main functionalities exposed by the `Payroll` application, including the permissions required to initiate a call, as well as, how the entities interact with each other. 
 
@@ -122,7 +123,7 @@ The following graphic attempts to give an overview of the components, actors and
 
 There are two main groups of actors in the Payroll system:
 
-* **Payroll manager** - privileged access to the payroll application. Can be Ethereum accounts (single, multiple or multisig) as well as delegated to the DAOs voting application. A list of permissions with their description can be found in the [Updated Application `README`](https://github.com/aragon/aragon-apps/tree/payroll-readme/future-apps/payroll).
+* **Payroll manager** - privileged access to the payroll application. Can be Ethereum accounts (single, multiple or multisig) as well as delegated to any of the DAO's forwarding applications (e.g. Voting). It could also be set it so that only the managers of the org (holding a special token controlled by a Token Manager) act as Payroll managers. A list of permissions with their description can be found in the [Updated Application `README`](https://github.com/aragon/aragon-apps/tree/payroll-readme/future-apps/payroll).
 * **Employees** - Any Ethereum address added to the payroll application by the payroll manager. Employees can change their own Address, specify the allocation of the allowed tokens they want to be paid with, and initiate the payout. Employees may receive `ETH` or compliant tokens. `Payroll` is also acting as an Aragon forwarder by implementing the `IForward` interface allowing active Employees to execute scripts on behalf of the `Payroll` application (`Finance` is blacklisted from being called by default as `Payroll` has permissions on `Finance` to initiate payments).
 
 For other actors in this system see [Actors](#51-actors).
@@ -130,6 +131,11 @@ For other actors in this system see [Actors](#51-actors).
 #### Permission Overview
 
 The following diagram depicts the permissions within the DAO including the `Payroll` application derived from the [Aragon DAO Permission Table Examples (MultiSig)](https://github.com/aragon/dao-kits/blob/master/kits/multisig/readme.md#permissions) and the `PayrollKit.sol` as provided in the codebase.
+
+
+_Update:_ `PayrollKit.sol` has been moved to an examples/ folder to make it more clear that it is not meant to be used as a production kit (PR: [aragon-apps/pull/898](https://github.com/aragon/aragon-apps/pull/898)).
+
+Aragon team is suggesting to initial users to install the Payroll app manually into their already created organizations. In the future, more templates and options for a Payroll app will come "pre-installed" when the organization is created. At the very least, most sensitive actions ("management") will be protected by a Voting app.
 
 ![Payroll Component Permissions](./static-content/tm_payroll_permissions.png "Payroll Component Permissions")
 
@@ -139,13 +145,13 @@ The following diagram depicts the permissions within the DAO including the `Payr
 
 * The code is well written with many possible attacks in mind (e.g. DoS) and considers most of the security best practices.
 
-* Payroll similar to Aragon OS (v3) uses Solidity version `0.4.24` which is **not** the latest version of Solidity. 
+* Payroll similar to aragonOS (`@aragon/os@4.2.0`) uses Solidity version `0.4.24` which is **not** the latest version of Solidity. 
 
 * It is possible for active Employees in Payroll to forward their request to other Aragon apps using `Forwarder` in Payroll, except to `Finance` as it is blacklisted in the code. This is intended to be used as a method for employees to participate in votings and other organizational functionalities, however, this widens the general attack vector of the system. At this time, no critical attack vectors have been identified.
 
 * Allowed tokens in the payroll system are not modifiable. If an accepted token in the Payroll contract is compromised or updated to the new address, the whole Payroll system should be redeployed. This is by design because if a token address is changed, all the employees' existing token allocations should be updated as well.
   
-* If one of the tokens balance is not sufficient, `payday()` function will fail.
+* If one of the tokens balance of the underlying Vault is not sufficient or if any of the token budgets configured in Finance have been reached, `payday()` function will fail.
   
 * Arithmetic operations performed are protected by SafeMath where it makes sense.
   
@@ -182,16 +188,17 @@ Please refer to the diagrams in [Chapter 3](#3-system-overview) for an overview 
 * The payroll application is interacting with the DAO's own finance application authenticated by the `CREATE_PAYMENTS_ROLE` on finance that permits the contract to execute payouts. 
 * By interacting with finance, the payroll application maintains indirect access to the DAO's vault.
 * The payroll application is managed by a set of roles that can be assigned to arbitrary ethereum accounts including the DAOs voting application. 
-* The *payroll manager* role is comprised of a set of permissions considered sensitive as they allow to change various core aspects of the application.
+* Holding any of the *management*-related roles elevates an account to higher privileges (e.g. *hiring manager* or *payroll configuration manager*), and based on their permission they are allowed to change various core aspects of the application.
 * The *payroll manager* can change the price feed used for base token conversions at any time.
 * The *payroll manager* defines which tokens can be used to pay out salary. Tokens cannot be removed from this list and it is limited to a maximum number of allowed tokens.
 * The *payroll manager* can put arbitrary ethereum addresses on the DAO's payroll by adding them as employees specifying their initial salary. Payroll managers can terminate *employees*, change their salary and add bonus and reimbursements.
 * The *payroll manager* remains in indirect control of the exchange conversion rates via the price feed configuration.
-* *Employees* have to trust the *payroll manager*. 
+* *Employees* have to trust the *payroll manager*. Although it should be noted that the role of managers may be one entity, or multiple different ones with different roles granted.
 * *Employees* can expect that base tokens they earned cannot be removed (bonus, reimbursements, salary up to the point of termination or salary adjustment). 
 * *Employees* cannot return erroneously received bonus, reimbursements or salary `denominationToken` within the system without having to pay out and return them manually, potentially introducing conversion losses.
-* *Employees* have to trust the *price feed provider* to receive fair exchange rates within the block they're calling for a payout.
+* *Employees* have to trust the *price feed provider* to receive fair exchange rates within the block they're calling for a payout. 
 * The DAO has to trust the *price feed provider* to receive fair exchange rates that will not drain all the DAOs funds.
+> The trust in the pricefeed can be mitigated if the *price feed provider* entity with the role of `CHANGE_PRICE_FEED_ROLE` is a Voting app rather than an EOA account.
 * Terminated *Employees* can only be deleted from the contract storage once they transferred all their bonuses, reimbursements and salary.
 * *Anyone* who has permission to update applications in kernel can just upgrade Payroll contract implementation.
 * Payroll's permission to make transactions through the Finance application may be recalled.
@@ -215,21 +222,21 @@ The following table contains all the issues discovered during the audit, ordered
 
 | Chapter      | Issue Title             | Issue Status | Severity    |
 |:------------:| ----------------------- |:------------:|:-----------:|
-| 6.1  | [PriceFeed is not trustless and can affect the payouts ](#61-pricefeed-is-not-trustless-and-can-affect-the-payouts) | Open  | Major |
-| 6.2  | [Employee should be able limit exchange rate](#62-employee-should-be-able-limit-exchange-rate) | Open  | Major |
-| 6.3  | [Employee may lose up to a second of the salary](#63-employee-may-lose-up-to-a-second-of-the-salary) | Open  | Medium |
-| 6.4  | [Exchange rate upper limit](#64-exchange-rate-upper-limit) | Open  | Medium |
-| 6.5  | [Allowed tokens list should be modifiable](#65-allowed-tokens-list-should-be-modifiable) | Open  | Medium |
-| 6.6  | [Decimal calculations `ONE`, can differ between Price feed and Payroll](#66-decimal-calculations-one-can-differ-between-price-feed-and-payroll) | Open  | Minor |
-| 6.7  | [Create an external function to view employees balance](#67-create-an-external-function-to-view-employees-balance) | Open  | Minor |
-| 6.8  | [Payroll - Unused Import `SafeMath8`](#68-payroll---unused-import-safemath8) | Open  | Minor |
-| 6.9  | [Payroll - Internal role constants can be slightly gas optimized](#69-payroll---internal-role-constants-can-be-slightly-gas-optimized) | Open  | Minor |
+| 6.1  | [PriceFeed is not trustless and can affect the payouts ](#61-pricefeed-is-not-trustless-and-can-affect-the-payouts) | Won&#x27;t Fix  | Major |
+| 6.2  | [Employee should be able limit exchange rate](#62-employee-should-be-able-limit-exchange-rate) | Closed  | Major |
+| 6.3  | [Employee may lose up to a second of the salary](#63-employee-may-lose-up-to-a-second-of-the-salary) | Closed  | Medium |
+| 6.4  | [Exchange rate upper limit](#64-exchange-rate-upper-limit) | Won&#x27;t Fix  | Medium |
+| 6.5  | [Allowed tokens list should be modifiable](#65-allowed-tokens-list-should-be-modifiable) | Closed  | Medium |
+| 6.6  | [Decimal calculations `ONE`, can differ between Price feed and Payroll](#66-decimal-calculations-one-can-differ-between-price-feed-and-payroll) | Closed  | Minor |
+| 6.7  | [Create an external function to view employees balance](#67-create-an-external-function-to-view-employees-balance) | Closed  | Minor |
+| 6.8  | [Payroll - Unused Import `SafeMath8`](#68-payroll---unused-import-safemath8) | Closed  | Minor |
+| 6.9  | [Payroll - Internal role constants can be slightly gas optimized](#69-payroll---internal-role-constants-can-be-slightly-gas-optimized) | Closed  | Minor |
 
 ### 6.1 PriceFeed is not trustless and can affect the payouts
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Major | Open | This issue is currently under review. |
+| Major | Won&#x27;t Fix | Aragon team are investigating more trust-minimized, price feed implementations. There are some ideas being discussed, such as [aragon/ppf#15](https://github.com/aragon/ppf/issues/15), [aragon/ppf#16](https://github.com/aragon/ppf/issues/16).  |
 
 #### Description
 PriceFeed, `PPF`, is not trustless and is controlled by `operator` and `operatorOwner`. `operator` will be running PPF-server or similar services to update the pair exchange rates `xrt` on the PPF smart contract. This means the operator's key is a hot key and requires to be on an online system. Compromising this key can result in fake prices to be added to the price feed which reflects the payouts done by `payroll` contract. Colluding with an employee can drain all stored funds.
@@ -252,7 +259,7 @@ There are different approaches to fix this issue. One could be to use a more dec
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Major | Open | This issue is currently under review. |
+| Major | Closed | Fixed in [aragon/aragon-apps#904](https://github.com/aragon/aragon-apps/pull/904), by adding optional argument of `uint256[] _minRates` to `payday()`. This is additional to another fix that adds allocation token distribution per employee rather than organizational. |
 
 #### Description
 
@@ -273,7 +280,7 @@ Add the ability for an employee to submit minimal exchange rates that are accept
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Medium | Open | This issue is currently under review. |
+| Medium | Closed | Fixed in [aragon/aragon-apps#907](https://github.com/aragon/aragon-apps/pull/907), [aragon/aragon-apps#912](https://github.com/aragon/aragon-apps/pull/912), [aragon/aragon-apps#926](https://github.com/aragon/aragon-apps/pull/926).  |
 
 #### Description
 
@@ -305,7 +312,7 @@ While losing up to a second might not sound like a big issue, it can be easily f
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Medium | Open | This issue is currently under review. |
+| Medium | Won&#x27;t Fix | If desired, the Payroll manager can implement a `IFeed` that sets these limits and use it as their price feed. |
 
 #### Description
 
@@ -322,7 +329,7 @@ It should be noted that this upper limit can also be used by the employer to pre
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Medium | Open | This issue is currently under review. |
+| Medium | Closed | Fixed in [aragon/aragon-apps#901](https://github.com/aragon/aragon-apps/pull/901/) &amp; [aragon/aragon-apps#904](https://github.com/aragon/aragon-apps/pull/904). This is done by adding `setAllowedToken()` callable by `MANAGE_ALLOWED_TOKENS_ROLE`. if a token is disallowed, Employees have to update their token allocation by calling `determineAllocation()` before calling `payday()`.  |
 
 #### Description
 
@@ -345,7 +352,7 @@ Allow modifying `allowedTokens` list while maintaining security. Modifying the l
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Minor | Open | This issue is currently under review. |
+| Minor | Closed | Fixed by adding `feed.ratePrecision()` ([aragon/ppf#28](https://github.com/aragon/ppf/pull/28)) and proper checks in `payroll.payday()` ([aragon/aragon-apps#902](https://github.com/aragon/aragon-apps/pull/902)). |
 
 #### Description
 The decimal calculation is using a hardcoded `ONE = 10 ** 18`; in both PPF (**uint256**) and Payroll (**uint128**) contracts. 
@@ -400,7 +407,7 @@ In `Payroll.sol` where `ONE` is used, read the value from PPF contract, or simpl
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Minor | Open | This issue is currently under review. |
+| Minor | Closed | Fixed in [aragon/aragon-apps#900](https://github.com/aragon/aragon-apps/pull/900). |
 
 #### Description
 
@@ -417,7 +424,7 @@ Create an external view function that returns the amount of money that can be cu
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Minor | Open | This issue is currently under review. |
+| Minor | Closed | Fixed in [aragon/aragon-apps#897](https://github.com/aragon/aragon-apps/pull/897). |
 
 #### Description
 
@@ -440,7 +447,7 @@ Remove the unused import statement.
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Minor | Open | This issue is currently under review. |
+| Minor | Closed | Fixed in [aragon/aragon-apps#899](https://github.com/aragon/aragon-apps/pull/899). |
 
 #### Description
 
