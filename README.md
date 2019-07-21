@@ -41,7 +41,6 @@ ConsenSys Diligence conducted a security audit on a new Aragon app [Payroll](htt
 * **Lead Auditor:** Shayan Eskandari
 * **Co-auditors:** Daniel Luca, Martin Ortner, Sergii Kravchenko
 * **Date:** June 2019
-* 
 
 
 ## 2 Audit Scope
