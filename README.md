@@ -33,14 +33,15 @@
 
 ## 1 Summary
 
-ConsenSys Diligence conducted a security audit on a new Aragon app [Payroll](https://github.com/aragon/aragon-apps/tree/master/future-apps/payroll) and [Passive Pricefeed (PPF)](https://github.com/aragon/ppf). These apps are deeply dependent on [Aragon OS](https://github.com/aragon/aragonOS) and some other Aragon apps (such as [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance)) which are out of the scope for this audit.
+ConsenSys Diligence conducted a security audit on a new Aragon app [Payroll](https://github.com/aragon/aragon-apps/tree/master/future-apps/payroll) and [Passive Pricefeed (PPF)](https://github.com/aragon/ppf). These apps are deeply dependent on [aragonOS](https://github.com/aragon/aragonOS) and some other Aragon apps (such as [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance)) which are out of the scope for this audit.
 
 * **Project Name:** Payroll Aragon App and PPF Contracts
 * **Client Name:** Aragon Association
 * **Client Contact:** Louis Giraux (association@aragon.org)
 * **Lead Auditor:** Shayan Eskandari
 * **Co-auditors:** Daniel Luca, Martin Ortner, Sergii Kravchenko
-* **Date:** June 2019
+* **Date:** July 2019
+* 
 
 
 ## 2 Audit Scope
@@ -55,7 +56,6 @@ This audit covered the following repositories and files:
 
 | File           | SHA-1 hash                             |
 |----------------|----------------------------------------|
-| payroll/future-apps/payroll/contracts/PayrollKit.sol | 6637ffaead511c8121bce29534a2f867c2efdca7 |
 | payroll/future-apps/payroll/contracts/Payroll.sol | e0e6aba06d5c030d56b5026680c643644638ec38 |
 | ppf-contracts/packages/ppf-contracts/contracts/PPF.sol | 291a27a38cb5d1605fed855b5e47b8928c157dea |
 | ppf-contracts/packages/ppf-contracts/contracts/IFeed.sol | 3a1a6b3e463fcd862b658b2f2c427027c51a2c86 |
@@ -63,6 +63,11 @@ This audit covered the following repositories and files:
 | ppf-contracts/packages/ppf-contracts/contracts/PPFFactory.sol | f3689a91643f72ea7d2c33057ddd057c363ca966 |
 
 
+The following files were used as reference point and were not included in the full audit:
+
+| File           | SHA-1 hash                             |
+|----------------|----------------------------------------|
+| payroll/future-apps/payroll/contracts/PayrollKit.sol | 6637ffaead511c8121bce29534a2f867c2efdca7 |
 
 ### 2.1 Documentation 
 
@@ -72,7 +77,7 @@ The following documentation was available to the audit team:
 * [aragon developer portal](https://hack.aragon.org/)
 * [Passive Pricefeed (PPF) README](https://github.com/aragon/ppf/blob/master/readme.md)
 * [Payroll README](https://github.com/aragon/aragon-apps/blob/master/future-apps/payroll/README.md)
-* [Updated Payroll README](https://github.com/aragon/aragon-apps/tree/payroll-readme/future-apps/payroll)
+* [Updated Payroll README](https://github.com/aragon/aragon-apps/blob/ff79b8b9fc697d57ff03ac6fd174347ebe0d6b37/future-apps/payroll/README.md)
 * Inline Code Documentation and Comments
 * [Aragon DAO Permission Table Examples](https://github.com/aragon/dao-kits/blob/master/kits/multisig/readme.md#permissions)
 
@@ -89,7 +94,7 @@ The audit team evaluated that the system is secure, resilient, and working accor
    * Quality of test coverage
 
 ## 3 System Overview
-The purpose of the Payroll app is to implement a Payroll system in multiple currencies/tokens. `Payroll.sol` requires a price feed and [Passive Pricefeed (PPF)](https://github.com/aragon/ppf) is one such pricefeed available to Payroll instances for conversion between the tokens. Aragon team  encourages initial users to set up their instance with a simplified price feed that only sets a 1:1 rate between USD and DAI (and of course, DAI to DAI). It also uses aragonOS for Access Control (ACL) and other Aragon app functionalities. [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance) is a "frontend" contract to the underlying [Vault](https://github.com/aragon/aragon-apps/tree/master/apps/vault), which manages budgets and other nice accounting decorators. The Vault stores and handles `ETH` and token transfers and no funds are stored in the other contracts.
+The purpose of the Payroll app is to implement a Payroll system in multiple currencies/tokens. `Payroll.sol` requires a price feed and [Passive Pricefeed (PPF)](https://github.com/aragon/ppf) is one such pricefeed available to Payroll instances for conversion between the tokens. Aragon team  encourages initial users to set up their instance with a simplified price feed that only sets a 1:1 rate between USD and DAI (and of course, DAI to DAI). It also uses aragonOS for Access Control (ACL) and other Aragon app functionalities. [Finance](https://github.com/aragon/aragon-apps/tree/master/apps/finance) is a "frontend" contract to the underlying [Vault](https://github.com/aragon/aragon-apps/tree/master/apps/vault), which manages budgets and other nice accounting decorators. Payroll can also handle reimbursements and bonuses manually added by payroll managers. The Vault stores and handles `ETH` and token transfers and no funds are stored in the other contracts.
 
 
 ### 3.1 Detailed Design
@@ -148,7 +153,7 @@ Aragon team is suggesting to initial users to install the Payroll app manually i
 
 * It is possible for active Employees in Payroll to forward their request to other Aragon apps using `Forwarder` in Payroll, except to `Finance` as it is blacklisted in the code. This is intended to be used as a method for employees to participate in votings and other organizational functionalities, however, this widens the general attack vector of the system. At this time, no critical attack vectors have been identified.
 
-* Allowed tokens in the payroll system are not modifiable. If an accepted token in the Payroll contract is compromised or updated to the new address, the whole Payroll system should be redeployed. This is by design because if a token address is changed, all the employees' existing token allocations should be updated as well.
+* UPDATE: Allowed tokens in the payroll system can be modified. Tokens can be disallowed for any reason by `MANAGE_ALLOWED_TOKENS_ROLE` role. In case an employee has that token in her allocation, she needs to update her allocation by calling `determineAllocation` to be able to get a payout. This change was done after the initial audit report recommendations. 
   
 * If one of the tokens balance of the underlying Vault is not sufficient or if any of the token budgets configured in Finance have been reached, `payday()` function will fail.
   
@@ -189,7 +194,7 @@ Please refer to the diagrams in [Chapter 3](#3-system-overview) for an overview 
 * The payroll application is managed by a set of roles that can be assigned to arbitrary ethereum accounts including the DAOs voting application. 
 * Holding any of the *management*-related roles elevates an account to higher privileges (e.g. *hiring manager* or *payroll configuration manager*), and based on their permission they are allowed to change various core aspects of the application.
 * The *payroll manager* can change the price feed used for base token conversions at any time.
-* The *payroll manager* defines which tokens can be used to pay out salary. Tokens cannot be removed from this list and it is limited to a maximum number of allowed tokens.
+* The *payroll manager* defines which tokens can be used to pay out salary. Tokens can be removed from the allowed list by `MANAGE_ALLOWED_TOKENS_ROLE` and is limited to a maximum number of allowed tokens.
 * The *payroll manager* can put arbitrary ethereum addresses on the DAO's payroll by adding them as employees specifying their initial salary. Payroll managers can terminate *employees*, change their salary and add bonus and reimbursements.
 * The *payroll manager* remains in indirect control of the exchange conversion rates via the price feed configuration.
 * *Employees* have to trust the *payroll manager*. Although it should be noted that the role of managers may be one entity, or multiple different ones with different roles granted.
@@ -250,7 +255,9 @@ The recovery of such compromise is cumbersome as it requires multiple transactio
 
 #### Remediation
 
-There are different approaches to fix this issue. One could be to use a more decentralized price feed such as MakerDAO, Chainlink, or a multisig operator. Another approach, also suggested in [another issue](https://github.com/ConsenSys/aragon-payroll-audit-internal-2019-06/issues/62-employee-should-be-able-limit-exchange-rate), is to have a way to limit the acceptable exchange rates. This is not a trivial change as the employee and Payroll owner should update these limits based on the market movement, but there can be a min and max price rate that are acceptable. 
+There are different approaches to fix this issue. One could be to use a more decentralized price feed such as MakerDAO, Chainlink, or a multisig operator. Another approach, also suggested in [issue 6.2](#62-employee-should-be-able-limit-exchange-rate), is to have a way to limit the acceptable exchange rates. This is not a trivial change as the employee and Payroll owner should update these limits based on the market movement, but there can be a min and max price rate that are acceptable. 
+
+**Suggestion from Aragon team:** Initial users should use a default DAI:USD 1:1 pricefeed to start with, and then think about migrating to something more complex that they manage themselves, like PPF.
 
 --------------------
 
@@ -279,7 +286,7 @@ Add the ability for an employee to submit minimal exchange rates that are accept
 
 | Severity     | Status    | Remediation Comment |
 |:------------:|:---------:| ------------------- |
-| Medium | Closed | Fixed in [aragon/aragon-apps#907](https://github.com/aragon/aragon-apps/pull/907), [aragon/aragon-apps#912](https://github.com/aragon/aragon-apps/pull/912), [aragon/aragon-apps#926](https://github.com/aragon/aragon-apps/pull/926).  |
+| Medium | Closed | Fixed in [aragon/aragon-apps#907](https://github.com/aragon/aragon-apps/pull/907), [aragon/aragon-apps#912](https://github.com/aragon/aragon-apps/pull/912), [aragon/aragon-apps#926](https://github.com/aragon/aragon-apps/pull/926). The extra second now goes into an employee&#x27;s accrued salary. |
 
 #### Description
 
@@ -530,7 +537,7 @@ A complete list of functions with their visibility and modifiers can be found [h
 
 ## 8 Test Coverage Measurement
 
-Testing is implemented using Truffle. 934 tests are included for the Payroll contract, and they all pass. You can find the test script output [here](./tool-output/test-results/test-results.md).
+Testing is implemented using Truffle. 1796 tests are included for the Payroll contract, and they all pass. You can find the test script output [here](./tool-output/test-results/test-results.md).
 
 
 **We were unable to run code coverage tests successfully.** You can find the logs [here](./tool-output/test-results/test-results.md#coverage). We also noted that the coverage task is failing in the project teams [source repository CI pipeline](https://travis-ci.com/aragon/aragon-apps/jobs/209963057) where it is marked as [allowed to fail](https://github.com/aragon/aragon-apps/blob/268a4f34c172369601088e320304737f52eeef55/.travis.yml#L28-L30).
