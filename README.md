@@ -41,7 +41,6 @@ ConsenSys Diligence conducted a security audit on a new Aragon app [Payroll](htt
 * **Lead Auditor:** Shayan Eskandari
 * **Co-auditors:** Daniel Luca, Martin Ortner, Sergii Kravchenko
 * **Date:** July 2019
-* 
 
 
 ## 2 Audit Scope
@@ -73,7 +72,7 @@ The following files were used as reference point and were not included in the fu
 
 The following documentation was available to the audit team:
 
-* [aragonOS 3 reference documentation](https://hack.aragon.org/docs/aragonos-3-ref)
+* [aragonOS 4 reference documentation](https://hack.aragon.org/docs/aragonos-ref)
 * [aragon developer portal](https://hack.aragon.org/)
 * [Passive Pricefeed (PPF) README](https://github.com/aragon/ppf/blob/master/readme.md)
 * [Payroll README](https://github.com/aragon/aragon-apps/blob/master/future-apps/payroll/README.md)
@@ -127,7 +126,7 @@ The following graphic attempts to give an overview of the components, actors and
 
 There are two main groups of actors in the Payroll system:
 
-* **Payroll manager** - privileged access to the payroll application. Can be Ethereum accounts (single, multiple or multisig) as well as delegated to any of the DAO's forwarding applications (e.g. Voting). It could also be set it so that only the managers of the org (holding a special token controlled by a Token Manager) act as Payroll managers. A list of permissions with their description can be found in the [Updated Application `README`](https://github.com/aragon/aragon-apps/tree/payroll-readme/future-apps/payroll).
+* **Payroll manager** - privileged access to the payroll application. Can be Ethereum accounts (single, multiple or multisig) as well as delegated to any of the DAO's forwarding applications (e.g. Voting). It could also be set it so that only the managers of the org (holding a special token controlled by a Token Manager) act as Payroll managers. A list of permissions with their description can be found in the [Updated Application `README`](https://github.com/aragon/aragon-apps/tree/master/future-apps/payroll).
 * **Employees** - Any Ethereum address added to the payroll application by the payroll manager. Employees can change their own Address, specify the allocation of the allowed tokens they want to be paid with, and initiate the payout. Employees may receive `ETH` or compliant tokens. `Payroll` is also acting as an Aragon forwarder by implementing the `IForward` interface allowing active Employees to execute scripts on behalf of the `Payroll` application (`Finance` is blacklisted from being called by default as `Payroll` has permissions on `Finance` to initiate payments).
 
 For other actors in this system see [Actors](#51-actors).
@@ -249,9 +248,9 @@ PriceFeed, `PPF`, is not trustless and is controlled by `operator` and `operator
 
 A compromised `operator` key can change the `xrt` of a token pair to a number which results in higher payouts for employees. 
 The recovery of such compromise is cumbersome as it requires multiple transactions.
-- Deployment of new PPF with new `operator` keys
-- A user with `CHANGE_PRICE_FEED_ROLE` permission should call `payroll.setPriceFeed()` to switch to the new PPF.
-- PPF should have new prices added for payroll for payout.
+- Deployment of new PPF with new `operator` keys or change the `operator` of the PPF instance.
+- In case of new PPF deployment, a user with `CHANGE_PRICE_FEED_ROLE` permission should call `payroll.setPriceFeed()` to switch to the new PPF.
+- PPF should reset all exchange rates for payroll to payout.
 
 #### Remediation
 
